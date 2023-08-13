@@ -12,6 +12,7 @@ async function main() {
         { name: "Animaux" },
         { name: "Philosophes" },
         { name: "Scientifiques" },
+        { name: "Meurtriers" },
       ],
     });
   } catch (e) {

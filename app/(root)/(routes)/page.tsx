@@ -30,7 +30,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
     },
   });
 
-  const categories = await prismadb.category.findMany();
+  const categories = await prismadb.category.findMany({orderBy: {name: "asc"}});
   return (
     <div className="h-full space-y-2 p-4">
       <SearchInput />

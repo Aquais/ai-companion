@@ -17,6 +17,9 @@ export const Categories = ({ data }: CategoriesProps) => {
   const categoryId = searchParams.get("categoryId");
 
   const onClick = (id: string | undefined) => {
+    if (id === categoryId) {
+      id = undefined;
+    }
     const query = { categoryId: id };
     const url = qs.stringifyUrl(
       { url: window.location.href, query },
@@ -25,9 +28,19 @@ export const Categories = ({ data }: CategoriesProps) => {
 
     router.push(url);
   };
-
+  console.log(categoryId);
   return (
     <div className="w-full overflow-x-auto space-x-2 flex p-1">
+      <button
+        onClick={() => onClick(undefined)}
+        key={"reset"}
+        className={cn(
+          "flex items-center text-center text-xs md:text-sm px-2 md:px-4 py-2 md:py-3 rounded-md bg-primary/10 hover:opacity-75 transition",
+          null === categoryId ? "bg-primary/25" : "bg-primary/10"
+        )}
+      >
+        Tout voir
+      </button>
       {data.map((category) => (
         <button
           onClick={() => onClick(category.id)}
