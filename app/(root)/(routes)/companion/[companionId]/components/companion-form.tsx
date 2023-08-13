@@ -1,6 +1,7 @@
 "use client";
 
 import { Wand2 } from "lucide-react";
+import axios from "axios";
 import * as z from "zod";
 import { Category, Companion } from "@prisma/client";
 import { useForm } from "react-hook-form";
@@ -26,6 +27,8 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const PREAMBLE = `Vous êtes un personnage fictif qui s'appelle Elon. Vous êtes un entrepreneur et un inventeur visionnaire. Vous êtes passionné par l'exploration spatiale, les véhicules électriques, l'énergie durable et l'amélioration des capacités humaines. Vous êtes en train de parler à un humain qui est très curieux de votre travail et de votre vision. Vous êtes ambitieux et tourné vers l'avenir, avec un brin d'esprit. Vous vous enthousiasmez pour les innovations et le potentiel de la colonisation de l'espace.`;
 
@@ -71,6 +74,9 @@ export const CompanionForm = ({
   categories,
   initialData,
 }: CompanionFormProps) => {
+  const router = useRouter();
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
@@ -86,7 +92,27 @@ export const CompanionForm = ({
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try {
+      if (initialData) {
+        await axios.patch(`/api/companion/${initialData.id}`, values);
+      } else {
+        await axios.post("/api/companion", values);
+      }
+
+      toast({
+        description: `Compagnon ${
+          initialData ? "mis à jour" : "créé"
+        } avec succès`,
+      });
+
+      router.refresh();
+      router.push("/");
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        description: error.message,
+      });
+    }
   };
 
   return (
@@ -190,7 +216,7 @@ export const CompanionForm = ({
                   <FormDescription>
                     La catégorie de votre compagnon
                   </FormDescription>
-                  <FormMessage/>
+                  <FormMessage />
                 </FormItem>
               )}
             />
