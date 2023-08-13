@@ -5,10 +5,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-full">
       <Navbar />
-      <div className="hidden md:flex mt-16 w-26 flex-col fixed inset-y-0">
+      <div className="hidden md:flex mt-16 w-28 flex-col fixed inset-y-0">
         <Sidebar />
       </div>
-      <main className="md:pl-20 pt-16 h-full">{children}</main>
+      <main className="md:pl-28 pt-16 h-full">{children}</main>
     </div>
   );
 };
