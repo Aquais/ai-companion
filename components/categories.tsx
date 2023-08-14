@@ -28,7 +28,7 @@ export const Categories = ({ data }: CategoriesProps) => {
 
     router.push(url);
   };
-  console.log(categoryId);
+
   return (
     <div className="w-full overflow-x-auto space-x-2 flex p-1">
       <button
@@ -50,7 +50,7 @@ export const Categories = ({ data }: CategoriesProps) => {
             category.id === categoryId ? "bg-primary/25" : "bg-primary/10"
           )}
         >
-          {category.name}
+          {category.name} {category._count?.companions > 0 && `(${category._count?.companions})`}
         </button>
       ))}
     </div>

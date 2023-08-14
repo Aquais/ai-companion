@@ -15,7 +15,7 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
     where: {
       categoryId: searchParams.categoryId,
       name: {
-        search: searchParams.name,
+        contains: searchParams.name,
       },
     },
     orderBy: {
@@ -30,12 +30,21 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
     },
   });
 
-  const categories = await prismadb.category.findMany({orderBy: {name: "asc"}});
+  const categories = await prismadb.category.findMany({
+    orderBy: { name: "asc" },
+    include: {
+      _count: {
+        select: {
+          companions: true,
+        },
+      },
+    },
+  });
   return (
     <div className="h-full space-y-2 p-4">
       <SearchInput />
       <Categories data={categories} />
-      <Companions data={data}/>
+      <Companions data={data} />
     </div>
   );
 };
