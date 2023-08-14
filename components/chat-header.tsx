@@ -59,6 +59,7 @@ export const ChatHeader = ({ companion }: ChatHeaderProps) => {
         description: "La conversation a été supprimée",
       });
       router.refresh();
+      router.push("/");
     } catch (error) {
       toast({
         description: "Une erreur est survenue",

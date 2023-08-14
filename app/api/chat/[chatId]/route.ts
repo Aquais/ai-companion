@@ -177,7 +177,7 @@ export async function DELETE(
 
     return new NextResponse("Messages supprimés", { status: 200 });
   } catch (e) {
-    console.log("[CHAT_COMPANION_DELETE]", e);
+    console.log("[CHAT_DELETE]", e);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
