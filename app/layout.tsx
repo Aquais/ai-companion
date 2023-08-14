@@ -2,11 +2,12 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { cn } from "@/lib/utils";
+import { frFR } from "@clerk/localizations";
 
 import { ThemeProvider } from "@/components/theme-provider";
-import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
-import { frFR } from "@clerk/localizations";
+import { ProModal } from "@/components/pro-modal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
       <html lang="fr" suppressHydrationWarning>
         <body className={cn("bg-secondary", inter.className)}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <ProModal />
             {children}
             <Toaster />
           </ThemeProvider>

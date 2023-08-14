@@ -51,6 +51,7 @@ export async function GET() {
               interval: "month",
             },
           },
+          quantity: 1,
         },
       ],
       metadata: {
