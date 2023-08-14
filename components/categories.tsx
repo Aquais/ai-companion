@@ -35,7 +35,7 @@ export const Categories = ({ data }: CategoriesProps) => {
         onClick={() => onClick(undefined)}
         key={"reset"}
         className={cn(
-          "flex items-center text-center text-xs md:text-sm px-2 md:px-4 py-2 md:py-3 rounded-md bg-primary/10 hover:opacity-75 transition",
+          "whitespace-nowrap flex items-center text-center text-xs md:text-sm px-2 md:px-4 py-2 md:py-3 rounded-md bg-primary/10 hover:opacity-75 transition",
           null === categoryId ? "bg-primary/25" : "bg-primary/10"
         )}
       >
@@ -46,7 +46,7 @@ export const Categories = ({ data }: CategoriesProps) => {
           onClick={() => onClick(category.id)}
           key={category.id}
           className={cn(
-            "flex items-center text-center text-xs md:text-sm px-2 md:px-4 py-2 md:py-3 rounded-md bg-primary/10 hover:opacity-75 transition",
+            "whitespace-nowrap flex items-center text-center text-xs md:text-sm px-2 md:px-4 py-2 md:py-3 rounded-md bg-primary/10 hover:opacity-75 transition",
             category.id === categoryId ? "bg-primary/25" : "bg-primary/10"
           )}
         >
