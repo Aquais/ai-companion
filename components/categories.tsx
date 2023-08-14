@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 interface CategoriesProps {
-  data: Category[];
+  data: (Category & { _count: { companions: number } })[];
 }
 
 export const Categories = ({ data }: CategoriesProps) => {
@@ -50,7 +50,8 @@ export const Categories = ({ data }: CategoriesProps) => {
             category.id === categoryId ? "bg-primary/25" : "bg-primary/10"
           )}
         >
-          {category.name} {category._count?.companions > 0 && `(${category._count?.companions})`}
+          {category.name}{" "}
+          {category._count.companions > 0 && `(${category._count.companions})`}
         </button>
       ))}
     </div>
