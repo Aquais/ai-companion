@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { MessageSquare } from "lucide-react";
+import empty from "@/public/empty.png";
 
 interface CompanionProps {
   data: (Companion & {
@@ -17,7 +18,7 @@ export const Companions = ({ data }: CompanionProps) => {
     return (
       <div className="pt-10 flex flex-col items-center justify-center space-y-3">
         <div className="relative h-60 w-60">
-          <Image fill className="grayscale" alt="Empty" src="/empty.png " />
+          <Image fill className="grayscale" alt="Empty" src={empty} />
         </div>
         <p className="text-sm text-muted-foreground">Aucun compagnon </p>
       </div>
