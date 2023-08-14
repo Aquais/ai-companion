@@ -41,21 +41,24 @@ export const Companions = ({ data }: CompanionProps) => {
                   alt="Compagnon"
                 />
               </div>
-              <p className="font-bold">
-                {companion.name}
-              </p>
-              <p className="text-xs">
-                {companion.description}
+              <p className="font-bold">{companion.name}</p>
+              <p className="text-xs whitespace-nowrap">
+                {companion.description.length >= 30
+                  ? companion.description
+                      .split(" ")
+                      .slice(0, 5)
+                      .join(" ")
+                      .replace(/.{0,2}$/, "")
+                      .concat("...")
+                  : companion.description}
               </p>
             </CardHeader>
             <CardFooter className="flex items-center justify-between text-xs text-muted-foreground">
-                <p className="lowercase">
-                    @{companion.userName}
-                </p>
-                <div className="flex items-center">
-                    <MessageSquare className="w-3 h-3 mr-1"/>
-                    {companion._count.messages}
-                </div>
+              <p className="lowercase">@{companion.userName}</p>
+              <div className="flex items-center">
+                <MessageSquare className="w-3 h-3 mr-1" />
+                {companion._count.messages}
+              </div>
             </CardFooter>
           </Link>
         </Card>
