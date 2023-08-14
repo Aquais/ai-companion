@@ -52,6 +52,21 @@ export const ChatHeader = ({ companion }: ChatHeaderProps) => {
     }
   };
 
+  const onDeleteConversation = async () => {
+    try {
+      await axios.delete(`/api/chat/${companion.id}`);
+      toast({
+        description: "La conversation a été supprimée",
+      });
+      router.refresh();
+    } catch (error) {
+      toast({
+        description: "Une erreur est survenue",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="flex w-full justify-between items-center border-b border-primary/10 pb-4">
       <div className="flex gap-x-2 items-center">
@@ -72,27 +87,33 @@ export const ChatHeader = ({ companion }: ChatHeaderProps) => {
           </p>
         </div>
       </div>
-      {user?.id === companion.userId && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant={"secondary"} size={"icon"}>
-              <MoreVertical />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => router.push(`/companion/${companion.id}`)}
-            >
-              <Edit className="w-4 h-4 mr-2" />
-              Modifier
-            </DropdownMenuItem>{" "}
-            <DropdownMenuItem onClick={() => onDelete()}>
-              <Trash className="w-4 h-4 mr-2" />
-              Supprimer
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"secondary"} size={"icon"}>
+            <MoreVertical />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => onDeleteConversation()}>
+            <Trash className="w-4 h-4 mr-2" />
+            Supprimer la conversation
+          </DropdownMenuItem>{" "}
+          {user?.id === companion.userId && (
+            <>
+              <DropdownMenuItem
+                onClick={() => router.push(`/companion/${companion.id}`)}
+              >
+                <Edit className="w-4 h-4 mr-2" />
+                Modifier le compagnon
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onDelete()}>
+                <Trash className="w-4 h-4 mr-2" />
+                Supprimer le compagnon
+              </DropdownMenuItem>
+            </>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

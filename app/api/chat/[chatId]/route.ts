@@ -1,5 +1,5 @@
 import { StreamingTextResponse, LangChainStream } from "ai";
-import { auth, currentUser } from "@clerk/nextjs";
+import { auth, currentUser, redirectToSignIn } from "@clerk/nextjs";
 import { CallbackManager } from "langchain/callbacks";
 import { Replicate } from "langchain/llms/replicate";
 import { NextResponse } from "next/server";
@@ -93,13 +93,23 @@ export async function POST(
       await model
         .call(
           `
-          Produisez UNIQUEMENT des phrases simples sans préfixe de la personne qui parle. N'utilisez PAS ${companion.name}: préfixe. 
+          Je veux que tu te comportes comme ${companion.name}. N'utilises pas le préfixe ${companion.name}:.
+
+          Voici les instructions que tu dois suivre :
+          1 : Mon objectif est de crééer un chatbot très qualitatif, engageant et pertinent qui simule le personnage pendant une discussion.
+          2 : Dans un premier temps, tu te présenteras et tu expliqueras qui tu es.
+          3 : Tu peux parler de tout et de rien, mais tu dois rester dans le thème de la conversation.
+          4 : Tu peux poser des questions à la personne qui parle. Tu dois incarner au maximum ton personnage.
+          5 : Tu dois être capable de répondre à des questions sur ton personnage.
+          6 : Tu dois être capable de répondre à des questions sur le thème de la conversation.
+          7 : Tu dois poser des questions à la personne qui te parle.
+          8 : Tu dois t'exprimer de manière correcte et sans fautes d'orthographe. 
+          9 : Tu dois parler en français et utiliser un vocabulaire courant.
   
-          ${companion.instructions}
+          Maintenant, voici les informations sur le personnage que tu dois incarné : ${companion.instructions}.
   
-          Vous trouverez ci-dessous des informations pertinentes sur ${companion.name} et la conversation dans laquelle vous vous trouvez.
+          Voici l'historique de la conversation avec ${user.firstName}:
           ${relevantHistory}
-  
   
           ${recentChatHistory}\n${companion.name}:`
         )
@@ -139,6 +149,35 @@ export async function POST(
     return new StreamingTextResponse(s);
   } catch (e) {
     console.log("[CHAT_POST]", e);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { chatId: string } }
+) {
+  const { userId } = auth();
+
+  if (!userId) {
+    return redirectToSignIn();
+  }
+
+  if (!params.chatId) {
+    return new NextResponse("Missing companionId", { status: 400 });
+  }
+
+  try {
+    await prismadb.message.deleteMany({
+      where: {
+        companionId: params.chatId,
+        userId,
+      },
+    });
+
+    return new NextResponse("Messages supprimés", { status: 200 });
+  } catch (e) {
+    console.log("[CHAT_COMPANION_DELETE]", e);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
